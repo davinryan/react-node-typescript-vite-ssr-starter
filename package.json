@@ -1,0 +1,44 @@
+{
+  "name": "myed-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --no-warnings=ExperimentalWarning --loader ts-node/esm scripts/server-dev.ts",
+    "build:client": "tsc && vite build --outDir dist/client",
+    "build:ssr": "tsc && vite build --ssr src/ssr/entry-ssr.tsx --outDir dist/ssr",
+    "build:api": "tsc && vite build --ssr src/api/entry-api.ts --outDir dist/api",
+    "build": "npm run build:client && npm run build:ssr && npm run build:api",
+    "start": "node scripts/server-prod.js",
+    "test:unit": "cross-env NODE_ENV=test vitest --reporter=basic",
+    "test:unit:coverage": "cross-env NODE_ENV=test vitest run --coverage"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.3.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-istanbul": "^1.4.0",
+    "@vitest/ui": "^1.4.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jsdom": "^24.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vitest": "^1.4.0"
+  }
+}
