@@ -1,8 +1,8 @@
 import {PolicyExecutor, PolicyInformation} from './policyExecutor.types'
 import {PolicyExecutorBuilder} from './policyExecutor.builder'
 import {makeHasActionsDecision, makeHasAtLeastOneActivityDecision} from './decisionPoints'
-import {AllowDeny, makeReturnAllowDeny, makeThrowAuthZExceptionEnforcement} from './enforcementsPoints'
-import {makeWithActivitiesInformation} from './informationPoints'
+import {AllowDeny, makeReturnAllowDeny, makeThrowAuthZExceptionEnforcement} from './enforcementPoints'
+import {makeWithActivitiesTokenInformation} from './informationPoints'
 
 describe('Policy Executor test suite', () => {
 
@@ -125,7 +125,7 @@ describe('Policy Executor test suite', () => {
   describe('withActivitiesInformation test suite', () => {
     const activitiesForSubject: string[] = ['claims:resource:claims:read', 'policy:resource:episodes:read']
     const authorise: PolicyExecutor = PolicyExecutorBuilder.make()
-      .addInformationPoint(makeWithActivitiesInformation(activitiesForSubject))
+      .addInformationPoint(makeWithActivitiesTokenInformation(activitiesForSubject))
       .addDecisionPoint(makeHasActionsDecision())
       .addEnforcementPoint(makeReturnAllowDeny())
       .build()
@@ -188,8 +188,8 @@ describe('Policy Executor test suite', () => {
       // Test & Verify
       try {
         authorise(policyInfo)
-      } catch (error: any) {
-        expect(error.message).toEqual('Failed because the following assertions were false hasActions.')
+      } catch (error: unknown) {
+        expect((error as Error).message).toEqual('Failed because the following assertions were false hasActions.')
       }
     })
   })
