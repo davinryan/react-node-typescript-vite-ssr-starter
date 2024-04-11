@@ -23,6 +23,7 @@ export abstract class BaseError extends Error {
     this.name = options.name
     this.options = options
     this.status = options.statusCode
+    this.message = options.payload.message
   }
 
   toLog(): ErrorOptions {

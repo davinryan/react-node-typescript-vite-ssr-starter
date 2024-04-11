@@ -1,10 +1,6 @@
-import {
-  HttpClient,
-  HttpClientConfig,
-  HttpClientRequestOptions,
-} from "../clients/clients.types";
 import { validateBuilder } from "./builder.validation";
 import { AxiosHttpClient } from "../clients/axios/axios.client";
+import {HttpClient, HttpClientConfig, HttpClientRequestOptions} from '@packages-be/http'
 
 class HttpClientBuilder {
   config: HttpClientConfig;

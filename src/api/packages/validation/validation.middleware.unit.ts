@@ -62,7 +62,7 @@ describe("Validator annotations test suite", () => {
       // fail("Should have thrown a validation error");
     } catch (error: any) {
       expect(error.name).toEqual("ValidationError");
-      expect(error.message).toEqual("Email is required");
+      expect(error.toLog().payload.details).toEqual("Email is required");
     }
 
     try {
@@ -70,7 +70,7 @@ describe("Validator annotations test suite", () => {
       // fail("Should have thrown a validation error");
     } catch (error: any) {
       expect(error.name).toEqual("ValidationError");
-      expect(error.message).toEqual("Not an email");
+      expect(error.toLog().payload.details).toEqual("Not an email");
     }
   });
 

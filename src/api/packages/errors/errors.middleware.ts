@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Logger } from "@packages-be/logger";
+import { Logger } from "@packages/logger";
 import { BaseError, UnknownError } from "./errors";
 
 const X_CORRELATION_ID_HEADER_NAME = "X-Organisation-Correlation-Id";
@@ -89,7 +89,7 @@ const makeErrorHandlerMiddleware =
         sendExpressResponseError({
           response,
           error: error as BaseError,
-          correlationId,
+          correlationId:  correlationId ? correlationId : 'unknown',
         });
       } else {
         const unknownError = new UnknownError(error);
@@ -97,7 +97,7 @@ const makeErrorHandlerMiddleware =
         sendExpressResponseError({
           response,
           error: unknownError,
-          correlationId,
+          correlationId:  correlationId ? correlationId : 'unknown',
         });
       }
     };

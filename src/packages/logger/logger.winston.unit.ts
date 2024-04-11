@@ -54,7 +54,7 @@ describe("Winston logger implementation", () => {
     logger.info(expectedLogMessage);
   });
 
-  it("should not log sensitive headers like Token and Authorisation as part of middleware", (done) => {
+  it("should not log sensitive headers like Token and Authorisation as part of middleware", () => {
     // Assemble
     const token = "12345";
     const authorisation = "12345";
@@ -92,6 +92,8 @@ describe("Winston logger implementation", () => {
     const loggerMiddleware = logger.middleware();
 
     // Act
-    loggerMiddleware({} as Request, {} as Response, done as any);
+
+    const callback = () => {}
+    loggerMiddleware({} as Request, {} as Response, callback);
   });
 });

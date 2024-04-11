@@ -116,6 +116,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -132,6 +133,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -155,6 +157,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -178,6 +181,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -201,6 +205,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -224,6 +229,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "some message",
           details: "some details",
         },
+        correlationId: 'unknown'
       })
     );
 
@@ -247,6 +253,7 @@ describe("Errors Middleware Test Suite", () => {
           message: "Error",
           details: "some message",
         },
+        correlationId: 'unknown'
       })
     );
   });
