@@ -5,7 +5,7 @@ import express from 'express';
 
 const app = express();
 
-app.use(express.static(path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'dist/client'), { index: false }));
+app.use(express.static(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../dist/client'), { index: false }));
 
 app.use('/api', (await import('../dist/api/entry-api.js')).apiRouter)
 
