@@ -25,7 +25,9 @@
     /* Utility */
     "baseUrl": "src",
     "paths": {
-      "@myed-component-library": ["client/component-library/*"],
+      "@myed-component-library/*": ["./client/component-library/*"],
+      "@packages-be/*": ["./api/packages/*"],
+      "@packages/*": ["./packages/*"]
     }
   },
   "include": ["src", "scripts/vitest-setup.ts", "scripts/server-dev.ts"],

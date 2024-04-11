@@ -20,7 +20,7 @@ type PolicyEnforcementPoint = (pip: PolicyInformation) => PolicyInformation
 
 type PolicyExecutor = (pip: PolicyInformation) => any
 
-export {
+export type {
   PolicyInformation,
   PolicyInformationPoint,
   PolicyDecisionPoint,
