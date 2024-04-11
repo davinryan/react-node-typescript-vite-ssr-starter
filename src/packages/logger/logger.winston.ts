@@ -81,6 +81,9 @@ class WinstonLogger implements Logger {
 
   constructor(location: string) {
     this.location = location;
+    if (WinstonLogger.logger === undefined) {
+      WinstonLogger.configure({}, 'info');
+    }
   }
 
   private getRequestContext(): {
