@@ -25,7 +25,7 @@
     /* Utility */
     "baseUrl": "src",
     "paths": {
-      "@myed-component-library/*": ["./client/component-library/*"],
+      "@componentLibrary/*": ["./client/component-library/*"],
       "@packages-be/*": ["./api/packages/*"],
       "@packages/*": ["./packages/*"]
     }
