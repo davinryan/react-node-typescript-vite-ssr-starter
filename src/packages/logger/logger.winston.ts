@@ -1,7 +1,8 @@
-import winston, { LoggerOptions } from "winston";
-import { Logger } from "./logger.types";
-import { RequestHandler } from "express";
-import { logger as expressWinstonlogger } from "./logger.middleware";
+import winston, {LoggerOptions} from 'winston'
+import {Logger} from './logger.types'
+import {RequestHandler} from 'express'
+import * as expressWinstonLogger from 'express-winston'
+
 
 type RequestContext = {
   headers: {
@@ -14,14 +15,14 @@ interface RequestContextProvider {
 }
 
 class WinstonLogger implements Logger {
-  private static loggerOptions: LoggerOptions;
-  private static logger: winston.Logger;
+  private static loggerOptions: LoggerOptions
+  private static logger: winston.Logger
   private static autoTraceHeaders: {
     [key: string]: any;
-  };
-  private static level: string;
-  private static contextProvider?: RequestContextProvider;
-  private readonly location: string;
+  }
+  private static level: string
+  private static contextProvider?: RequestContextProvider
+  private readonly location: string
 
   /**
    * Configure your logger.
@@ -45,15 +46,15 @@ class WinstonLogger implements Logger {
     level: string,
     context?: RequestContextProvider
   ) {
-    WinstonLogger.contextProvider = context;
-    WinstonLogger.autoTraceHeaders = autoTraceHeaders;
-    WinstonLogger.level = level.toLowerCase();
-    const { combine, errors, json, timestamp } = winston.format;
+    WinstonLogger.contextProvider = context
+    WinstonLogger.autoTraceHeaders = autoTraceHeaders
+    WinstonLogger.level = level.toLowerCase()
+    const {combine, errors, json, timestamp} = winston.format
     WinstonLogger.loggerOptions = {
       level: WinstonLogger.level,
       transports: [new winston.transports.Console()],
       format: combine(
-        errors({ stack: true }),
+        errors({stack: true}),
         timestamp(),
         winston.format((info: winston.Logform.TransformableInfo) => {
           const {
@@ -63,7 +64,7 @@ class WinstonLogger implements Logger {
             location,
             message,
             ...rest
-          } = info;
+          } = info
           return {
             level,
             timestamp,
@@ -71,18 +72,18 @@ class WinstonLogger implements Logger {
             correlationId,
             message,
             ...rest,
-          };
+          }
         })(),
-        json({ deterministic: false })
+        json({deterministic: false})
       ),
-    };
-    WinstonLogger.logger = winston.createLogger(WinstonLogger.loggerOptions);
+    }
+    WinstonLogger.logger = winston.createLogger(WinstonLogger.loggerOptions)
   }
 
   constructor(location: string) {
-    this.location = location;
+    this.location = location
     if (WinstonLogger.logger === undefined) {
-      WinstonLogger.configure({}, 'info');
+      WinstonLogger.configure({}, 'info')
     }
   }
 
@@ -90,26 +91,26 @@ class WinstonLogger implements Logger {
     [key: string]: string;
   } {
     if (WinstonLogger.contextProvider) {
-      const requestContext = WinstonLogger.contextProvider.get();
+      const requestContext = WinstonLogger.contextProvider.get()
       if (requestContext) {
-        const { headers } = requestContext;
-        const logHeaders = {};
+        const {headers} = requestContext
+        const logHeaders = {}
         if (Object.keys(WinstonLogger.autoTraceHeaders).length > 0) {
           Object.keys(WinstonLogger.autoTraceHeaders).map((headerName) => {
             // This is important as express's request.headers converts all headers to lowercase
             const headerValue =
-              headers[headerName] ?? headers[headerName.toLowerCase()];
+              headers[headerName] ?? headers[headerName.toLowerCase()]
             if (headerValue) {
               logHeaders[WinstonLogger.autoTraceHeaders[headerName]] =
-                headerValue;
+                headerValue
             }
-          });
+          })
         }
-        return { ...logHeaders };
+        return {...logHeaders}
       }
-      return {};
+      return {}
     }
-    return {};
+    return {}
   }
 
   /**
@@ -127,21 +128,24 @@ class WinstonLogger implements Logger {
    */
   public middleware(customHeaderBlacklist?: string[]): RequestHandler {
     const defaultHeaderBlacklist = [
-      "token",
-      "Token",
-      "Authorisation",
-      "authorisation",
-      "Authorization",
-      "authorization",
-    ];
-    return expressWinstonlogger({
+      'token',
+      'Token',
+      'Authorisation',
+      'authorisation',
+      'Authorization',
+      'authorization',
+      'cookie',
+      'Cookie'
+    ]
+
+    return expressWinstonLogger.logger({
       ...WinstonLogger.loggerOptions,
-      baseMeta: { location: this.location },
+      baseMeta: {location: this.location},
       expressFormat: true,
       headerBlacklist: customHeaderBlacklist
         ? [...defaultHeaderBlacklist, ...customHeaderBlacklist]
         : defaultHeaderBlacklist,
-    });
+    } as any)
   }
 
   /**
@@ -150,31 +154,34 @@ class WinstonLogger implements Logger {
    * @param transport {@link winston.transport}
    */
   public addTransport(transport: winston.transport) {
-    WinstonLogger.logger.add(transport);
+    WinstonLogger.logger.add(transport)
   }
 
   public debug(message: string, meta?: any): void {
     WinstonLogger.logger.debug(
       message,
-      { location: this.location, ...meta, ...this.getRequestContext() },
-      () => {}
-    );
+      {location: this.location, ...meta, ...this.getRequestContext()},
+      () => {
+      }
+    )
   }
 
   public info(message: string, meta?: any): void {
     WinstonLogger.logger.info(
       message,
-      { location: this.location, ...meta, ...this.getRequestContext() },
-      () => {}
-    );
+      {location: this.location, ...meta, ...this.getRequestContext()},
+      () => {
+      }
+    )
   }
 
   public warn(message: string, meta?: any): void {
     WinstonLogger.logger.warn(
       message,
-      { location: this.location, ...meta, ...this.getRequestContext() },
-      () => {}
-    );
+      {location: this.location, ...meta, ...this.getRequestContext()},
+      () => {
+      }
+    )
   }
 
   public error(error: Error, meta?: any): void {
@@ -182,8 +189,8 @@ class WinstonLogger implements Logger {
       location: this.location,
       ...this.getRequestContext(),
       ...meta,
-      stack: error.stack ? error.stack.split("\n") : "No stack available",
-    });
+      stack: error.stack ? error.stack.split('\n') : 'No stack available',
+    })
   }
 
   public fatal(error: Error, meta?: any): void {
@@ -191,14 +198,14 @@ class WinstonLogger implements Logger {
       location: this.location,
       ...this.getRequestContext(),
       ...meta,
-      stack: error.stack ? error.stack.split("\n") : "No stack available",
-    });
+      stack: error.stack ? error.stack.split('\n') : 'No stack available',
+    })
   }
 
   public get level() {
-    return WinstonLogger.level;
+    return WinstonLogger.level
   }
 }
 
-export { WinstonLogger }
-export type { RequestContext, RequestContextProvider };
+export {WinstonLogger}
+export type {RequestContext, RequestContextProvider}
